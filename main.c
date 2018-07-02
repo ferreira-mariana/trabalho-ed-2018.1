@@ -1,33 +1,47 @@
-#include "bMais.h"
+#include <string.h>
+#include "bmais.h"
 
 int main(int argc, char *argv[]){
   int t = 2;
   TAB * arvore = Inicializa();
+  char nmArq[128];
+  printf("Digite o nome do arquivo: ");
+  scanf("%s", nmArq);
+  arvore = leLinhas(arvore, nmArq);
+  //AlteraUmaInfo("Marisa Monte1991", arvore);
+  ImprimeInfos(arvore, 0);
+  //arvore = RemoveInfosIntermediarias(arvore);
+  printf("\n\n\n\n\n\n");
+  BuscaObras(arvore, "Adriana Calcanhotto", UltimoNo(arvore)->chave[arvore->nchaves-1]);
 
-  int num = 0, from, to;
-  while(num != -1){
-    printf("Digite um numero para adicionar. 0 para imprimir. -9 para remover, -2 para testeFolhas e -1 para sair\n");
+  /* menu
+  char letra[64];
+  char from[64], *to;
+  while(letra != 'tchau'){
+    printf("Digite. i para imprimir. r para remover, is para mostrar Informações Secundárias e tchau para sair\n");
     scanf("%i", &num);
-    if(num == -9){
-      scanf("%d", &from);
+    if(letra == 'r'){
+      scanf("%s", from);
       arvore = retira(arvore, from, t);
       Imprime(arvore,0);
     }
-    else if(num == -1){
+    else if(letra == 'tchau'){
       printf("\n");
       Imprime(arvore,0);
       Libera(arvore);
       return 0;
-    }else if(num == -2){
+    }else if(letra == 'is'){
       testeFolhas(arvore);
       printf("\n");
     }
-    else if(!num){
+    else if(letra == 'i'){
       printf("\n");
       Imprime(arvore,0);
     }
-    else arvore = Insere(arvore, num, t);
+    //else arvore = Insere(arvore, num, t);
     printf("\n\n");
   }
+  */
+
 
 }
