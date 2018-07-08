@@ -469,13 +469,13 @@ void menu(){
   scanf("%s", nmArq);
   arvore = leLinhas(arvore, nmArq);
   espera(1); //aguarda 2 segundos
-  printf("\nCriando uma arvore B+\n");
+  printf("\nCriando uma arvore B+...\n");
   espera(2); //aguarda 2 segundos
-  printf("\nInserindo as informacoes do arquivo %s na nova arvore\n", nmArq);
+  printf("\nInserindo as informacoes do arquivo %s na nova arvore...\n", nmArq);
   espera(2);
-  while(operacao != 0){
+  while(operacao){
     printf("\nDigite um numero para escolher o que fazer agora:\n");
-    espera(2);
+    espera(1);
     printf("\n0- Sair\n1 - Ver a arvore\n2- Editar informacoes\n3- Remover informacao\n4- Buscar obras de um artista\n5- Liberar arvore\n");
     scanf("%d", &operacao);
     if(operacao == 1){
