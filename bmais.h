@@ -39,8 +39,8 @@ TAB *Inicializa();
 TAB *Divisao(TAB *x, int i, TAB* y, int t);
 TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t);
 TAB *Insere(TAB *T, char *chave, Info *adic, int t);
-TAB* remover(TAB* arv, char *chave, int t);
-TAB* retira(TAB* arv, char *chave, int t);
+TAB *remover(TAB* arv, char *chave, int t);
+TAB *retira(TAB* arv, char *chave, int t);
 void testeFolhas(TAB *t);
 
 //funcoes de busca

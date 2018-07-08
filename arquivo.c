@@ -10,20 +10,26 @@ TAB* leLinhas(TAB *arv, char *nome){
   char linha[256], *token;
   while (fgets(linha, sizeof(linha), arq)){
         Info *infos = (Info *) malloc(sizeof(Info));
-        token = strtok(linha, "/");
-        strcpy(infos->cantor, token);
+        if(linha[1]=='\0') break; //string vazia
+
+	token = strtok(linha, "/");
+        
+	strcpy(infos->cantor, token);
         token = strtok(NULL, "/");
         char chave[200];
         strcpy(chave, infos->cantor);
         strcat(chave, token);
-        infos->ano = atoi(token);
+        
+	infos->ano = atoi(token);
         token = strtok(NULL, "/");
         infos->nMusicas = atoi(token);
         token = strtok(NULL, "/");
         infos->minutos = atoi(token);
         token = strtok(NULL, "/");
-        strcpy(infos->nmAlbum, token);
+        
+	strcpy(infos->nmAlbum, token);
         arv = Insere(arv, chave, infos, t);
+
       }
       return arv;
   }

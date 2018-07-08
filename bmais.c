@@ -152,7 +152,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar 
     strcpy(z->chave[j], y->chave[j+t]);
     //printf("===== ANO %d\n", z->adic[j]->ano );
 
-    z->adic[j] = y->adic[j+t];
+    //z->adic[j] = y->adic[j+t];
 
     //printf("===== ANO %d\n", z->adic[j]->ano );
 
@@ -168,7 +168,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar 
   x->filho[i] = z;
   for(j=x->nchaves; j>=i; j--){
     strcpy(x->chave[j], x->chave[j-1]);
-    x->adic[j] = x->adic[j-1];
+    //x->adic[j] = x->adic[j-1];
   }
   strcpy(x->chave[i-1], y->chave[t-1]);
   x->adic[i-1] = y->adic[t-1];
@@ -468,11 +468,20 @@ void menu(){
   printf("Por favor, digite o nome do arquivo: \n");
   scanf("%s", nmArq);
   arvore = leLinhas(arvore, nmArq);
+
+
+
+  Imprime(arvore,0);
+ 
   espera(1); //aguarda 2 segundos
   printf("\nCriando uma arvore B+...\n");
   espera(2); //aguarda 2 segundos
   printf("\nInserindo as informacoes do arquivo %s na nova arvore...\n", nmArq);
   espera(2);
+
+  //Imprime(arvore,0);
+	//retira(arvore, "Red Hot Chili Peppers2006", 2);
+ 
   while(operacao){
     printf("\nDigite um numero para escolher o que fazer agora:\n");
     espera(1);
@@ -505,9 +514,7 @@ void menu(){
   }
   
 }
-
 void espera (unsigned int secs) {
     unsigned int retTime = time(0) + secs;  
     while (time(0) < retTime);              
 }
-
