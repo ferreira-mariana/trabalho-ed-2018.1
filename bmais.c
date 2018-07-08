@@ -54,14 +54,14 @@ void ImprimeInfos(TAB *a, int andar){ //so imprime se for folha
     for(i=0; i<=a->nchaves-1; i++){
       ImprimeInfos(a->filho[i],andar+1);
       for(j=0; j<=andar; j++) printf("   ");
-      //if(a->folha){
+      if(a->folha){
         printf("Chave: %s\n", a->chave[i]);
         printf("Cantor: %s\n", a->adic[i]->cantor);
         printf("Ano: %d\n", a->adic[i]->ano);
         printf("No Musicas: %d\n", a->adic[i]->nMusicas);
         printf("Minutos: %d\n", a->adic[i]->minutos);
         printf("Album: %s\n", a->adic[i]->nmAlbum);
-      //}
+      }
     }
     ImprimeInfos(a->filho[i],andar+1);
   }
@@ -149,7 +149,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar 
   z->folha = 0;
   int j;
   for(j=0;j<t-1;j++){
-    z->chave[j] = y->chave[j+t];
+    strcpy(z->chave[j], y->chave[j+t]);
     //printf("===== ANO %d\n", z->adic[j]->ano );
 
     z->adic[j] = y->adic[j+t];
@@ -167,7 +167,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar 
   for(j=x->nchaves; j>=i; j--) x->filho[j+1] = x->filho[j];
   x->filho[i] = z;
   for(j=x->nchaves; j>=i; j--){
-    x->chave[j] = x->chave[j-1];
+    strcpy(x->chave[j], x->chave[j-1]);
     x->adic[j] = x->adic[j-1];
   }
   strcpy(x->chave[i-1], y->chave[t-1]);
