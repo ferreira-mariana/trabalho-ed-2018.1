@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "bmais.h"
 
 TAB *Cria(int t){
@@ -40,7 +41,7 @@ void Imprime(TAB *a, int andar){
     int i,j;
     for(i=0; i<=a->nchaves-1; i++){
       Imprime(a->filho[i],andar+1);
-      for(j=0; j<=andar; j++) printf("   ");
+      for(j=0; j<=andar; j++) printf("              ");
       printf("%s\n", a->chave[i]);
     }
     Imprime(a->filho[i],andar+1);
@@ -74,6 +75,7 @@ TAB *Busca(TAB* arv, char *ch){
   while(i < arv->nchaves && strcasecmp(arv->chave[i], ch)<0) i++;
   if((i < arv->nchaves) && strcasecmp(arv->chave[i], ch)==0){
     if(arv->folha){
+      printf("achei: %s\n", arv->chave[i]);
       return arv;
     }
     return Busca(arv->filho[i+1], ch);
@@ -90,6 +92,7 @@ Info *BuscaInfos(char *chave, TAB *arv){
 }
 
 void AlteraUmaInfo(char *chave, TAB *arv){
+  printf("entrou pra alterar\n");
   Info *infos = BuscaInfos(chave, arv);
   if(!infos) return;
   //printf("Valores originais: \n%d musicas\n%d minutos\nNome do album: %s",
@@ -231,7 +234,7 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
     return T;
   }
   if(T->nchaves == (2*t)-1){
-    printf("Nó cheio, tem que dividir\n");
+    //printf("Nó cheio, tem que dividir\n");
     TAB *S = Cria(t);
     S->nchaves=0;
     S->folha = 0;
@@ -450,8 +453,46 @@ TAB* remover(TAB* arv, char *ch, int t){
   return arv;
 }
 
-
 TAB* retira(TAB* arv, char *chave, int t){
   if(!arv || !Busca(arv, chave)) return arv;
   return remover(arv, chave, t);
 }
+
+
+void menu(){
+  int t = 2;
+  TAB * arvore = Inicializa();
+  char nmArq[128];
+  int operacao = 1;
+  
+  printf("Por favor, digite o nome do arquivo: \n");
+  scanf("%s", nmArq);
+  arvore = leLinhas(arvore, nmArq);
+  espera(1); //aguarda 2 segundos
+  printf("\nCriando uma arvore B+\n");
+  espera(2); //aguarda 2 segundos
+  printf("\nInserindo as informacoes do arquivo %s na nova arvore\n", nmArq);
+  espera(2);
+  while(operacao != 0){
+    printf("\nDigite um numero para escolher o que fazer agora:\n");
+    espera(2);
+    printf("\n0- Sair\n1 - Ver a arvore\n2- Editar informacoes\n3- Remover informacao\n4- Buscar obras de um artista\n5- Liberar arvore\n");
+    scanf("%d", &operacao);
+    if(operacao == 1){
+      Imprime(arvore,0);
+    }  
+    else if(operacao == 2){
+      char chave[200];
+      printf("\nDigite o nome da chave que voce quer editar:\n");
+      scanf("%[^\n]", chave);
+      AlteraUmaInfo(chave, arvore);
+    }
+  }
+  
+}
+
+void espera (unsigned int secs) {
+    unsigned int retTime = time(0) + secs;  
+    while (time(0) < retTime);              
+}
+

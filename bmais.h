@@ -49,3 +49,6 @@ Info *BuscaInfos(char *chave, TAB *arv);
 
 void AlteraUmaInfo(char *chave, TAB *arv);
 void ImprimeInfos(TAB *a, int andar);
+
+void menu();
+void espera(unsigned int secs);

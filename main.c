@@ -2,17 +2,12 @@
 #include "bmais.h"
 
 int main(int argc, char *argv[]){
-  int t = 2;
-  TAB * arvore = Inicializa();
-  char nmArq[128];
-  printf("Digite o nome do arquivo: ");
-  scanf("%s", nmArq);
-  arvore = leLinhas(arvore, nmArq);
+  menu();
   //AlteraUmaInfo("Marisa Monte1991", arvore);
-  ImprimeInfos(arvore, 0);
+  //ImprimeInfos(arvore, 0);
   //arvore = RemoveInfosIntermediarias(arvore);
-  printf("\n\n\n\n\n\n");
-  BuscaObras(arvore, "Adriana Calcanhotto", UltimoNo(arvore)->chave[arvore->nchaves-1]);
+  //printf("\n\n\n\n\n\n");
+ // BuscaObras(arvore, "Adriana Calcanhotto", UltimoNo(arvore)->chave[arvore->nchaves-1]);
 
   /* menu
   char letra[64];
