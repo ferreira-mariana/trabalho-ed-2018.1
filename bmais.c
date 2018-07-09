@@ -489,19 +489,19 @@ void menu(){
       Imprime(arvore,0);
     }  
     else if(operacao == 2){
-      char chave[200];
+      char chave[200] = "";
       printf("\nDigite o nome da chave que voce quer editar:\n");
       scanf("%[^\n]", chave);
       AlteraUmaInfo(chave, arvore);
     }
     else if(operacao == 3){
-      char chave[200];
+      char chave[200] = "";
       printf("\nDigite o nome da chave que voce quer remover:\n");
       scanf("%[^\n]", chave);
       remover(arvore, chave, 2);
     }
     else if(operacao == 4){
-      char chave[200];
+      char chave[200] = "";
       printf("\nDigite o nome do artista que voce quer buscar:\n");
       scanf("%[^\n]", chave);
       TAB* ultimo = UltimoNo(arvore);
