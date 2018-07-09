@@ -12,7 +12,6 @@ TAB *Cria(int t){
   for(i=0;i<t*2-1;i++) novo->chave[i] = (char *) malloc((64)*sizeof(char));
   novo->folha=1;
   novo->filho = (TAB**)malloc(sizeof(TAB*)*(t*2));
-  //int i;
   for(i=0; i<(t*2); i++) novo->filho[i] = NULL;
   novo->prox = NULL;
   novo->adic = (Info**)malloc(sizeof(Info*)*((2*t)-1));
@@ -251,22 +250,21 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
 void BuscaObras(TAB* a, char *cantor, char *final){
   if(!a) return;
   if(a->folha){
-    printf("e folha");
+    //printf("%s\n", cantor);
     int i;
     char* chaveAtual = a->chave[0];
     while(strcmp(chaveAtual, final) != 0){
-      for(i=0; i<(a->nchaves); i++){
-        if(strcmp(a->adic[i]->cantor, cantor)==0){
+      for(i=0; i < (a->nchaves); i++){
+        if(strcmp(a->adic[i]->cantor, cantor) == 0){
           printf("%s\n", a->adic[i]->nmAlbum);
         }
         chaveAtual = a->chave[i];
       }
       a = a->prox;
     }
-
   }
   else{
-    printf("nao e folha\n");
+    //printf("nao e folha\n");
     BuscaObras(a->filho[0], cantor, final);
   }
 
@@ -274,11 +272,10 @@ void BuscaObras(TAB* a, char *cantor, char *final){
 
 TAB* UltimoNo(TAB* a){
   if(!a) return a;
-  int max = a->nchaves;
   while(!a->folha){
+    int max = a->nchaves;
     a = a->filho[max]; //o ultimo filho da ultima chave do nó
   }
-  printf("%s", a->chave[a->nchaves-1]);
   return a;
 }
 
@@ -487,6 +484,7 @@ void menu(){
     espera(1);
     printf("\n0- Sair\n1 - Ver a arvore\n2- Editar informacoes\n3- Remover informacao\n4- Buscar obras de um artista\n5- Liberar arvore\n");
     scanf("%d", &operacao);
+    setbuf(stdin, NULL);
     if(operacao == 1){
       Imprime(arvore,0);
     }  
@@ -506,7 +504,8 @@ void menu(){
       char chave[200];
       printf("\nDigite o nome do artista que voce quer buscar:\n");
       scanf("%[^\n]", chave);
-      BuscaObras(arvore, chave, UltimoNo(arvore)->chave[arvore->nchaves-1]);
+      TAB* ultimo = UltimoNo(arvore);
+      BuscaObras(arvore, chave, ultimo->chave[ultimo->nchaves-1]);
     }
     else if(operacao == 5){
       arvore = Libera(arvore);
