@@ -94,9 +94,7 @@ void AlteraUmaInfo(char *chave, TAB *arv){
   printf("entrou pra alterar\n");
   Info *infos = BuscaInfos(chave, arv);
   if(!infos) return;
-  //printf("Valores originais: \n%d musicas\n%d minutos\nNome do album: %s",
-  //infos->nMusicas, infos->minutos, infos->nmAlbum);
-
+  
   printf("Digite os novos valores: \n");
   printf("Musicas: ");
   scanf("%d", &infos->nMusicas);
@@ -482,7 +480,7 @@ void menu(){
   while(operacao){
     printf("\nDigite um numero para escolher o que fazer agora:\n");
     espera(1);
-    printf("\n0- Sair\n1 - Ver a arvore\n2- Editar informacoes\n3- Remover informacao\n4- Buscar obras de um artista\n5- Liberar arvore\n");
+    printf("\n0- Sair\n1- Ver a arvore\n2- Editar informacoes\n3- Remover informacao\n4- Buscar obras de um artista\n5- Liberar arvore\n6- Imprime Informacoes Secundarias.\n");
     scanf("%d", &operacao);
     setbuf(stdin, NULL);
     if(operacao == 1){
@@ -509,6 +507,10 @@ void menu(){
     }
     else if(operacao == 5){
       arvore = Libera(arvore);
+    }
+    else if(operacao == 6){
+      ImprimeInfos(arvore, 0);
+
     }
   }
   
