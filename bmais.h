@@ -26,10 +26,9 @@ typedef struct ArvB{ com inteiro
 }TAB;
 */
 
-//funcoes do arquivo.c
+
 TAB *leLinhas(TAB *arv, char *nome);
-TAB *RemoveInfosIntermediarias(TAB *arv);
-void BuscaObras(TAB* a, char *cantor, char *final);
+
 TAB *UltimoNo(TAB* a);
 
 TAB *Cria(int t);
@@ -46,6 +45,9 @@ void testeFolhas(TAB *t);
 //funcoes de busca
 TAB *Busca(TAB* arv, char *ch);
 Info *BuscaInfos(char *chave, TAB *arv);
+void BuscaObras(TAB* a, char *cantor, char *final);
+TAB *RemoveObras(TAB* raiz, TAB* a, char *cantor, char *final);
+TAB *RemoveInfosIntermediarias(TAB *arv);
 
 void AlteraUmaInfo(char *chave, TAB *arv);
 void ImprimeInfos(TAB *a, int andar);
