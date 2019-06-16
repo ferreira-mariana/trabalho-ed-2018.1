@@ -12,7 +12,6 @@ TAB *Cria(int t){
   for(i=0;i<t*2-1;i++) novo->chave[i] = (char *) malloc((64)*sizeof(char));
   novo->folha=1;
   novo->filho = (TAB**)malloc(sizeof(TAB*)*(t*2));
-  //int i;
   for(i=0; i<(t*2); i++) novo->filho[i] = NULL;
   novo->prox = NULL;
   novo->adic = (Info**)malloc(sizeof(Info*)*((2*t)-1));
@@ -75,7 +74,6 @@ TAB *Busca(TAB* arv, char *ch){
   while(i < arv->nchaves && strcasecmp(arv->chave[i], ch)<0) i++;
   if((i < arv->nchaves) && strcasecmp(arv->chave[i], ch)==0){
     if(arv->folha){
-      printf("achei: %s\n", arv->chave[i]);
       return arv;
     }
     return Busca(arv->filho[i+1], ch);
@@ -84,29 +82,52 @@ TAB *Busca(TAB* arv, char *ch){
 }
 
 Info *BuscaInfos(char *chave, TAB *arv){
-  TAB *no = Busca(arv, chave);
-  if(!no) return NULL;
-  int i=0;
+  if(!arv){
+    return NULL;
+  }
+  int i = 0;
   while(i < arv->nchaves && strcasecmp(arv->chave[i], chave)<0) i++;
-  return no->adic[i];
+  if((i < arv->nchaves) && strcasecmp(arv->chave[i], chave)==0){
+    if(arv->folha){
+      printf("Chave: %s \n", arv->chave[i]);
+      printf("Nome do album: %s", arv->adic[i]->nmAlbum);
+      printf("Nome do cantor: %s\n", arv->adic[i]->cantor);
+      printf("Numero de faixas: %d\n", arv->adic[i]->nMusicas);
+      printf("Ano do album: %d\n", arv->adic[i]->ano);
+      printf("Tempo de duraçao:: %d\n", arv->adic[i]->minutos);
+      return arv->adic[i];
+    }
+    return BuscaInfos(chave, arv->filho[i+1]);
+  }
+  return BuscaInfos(chave, arv->filho[i]);
+  
 }
 
 void AlteraUmaInfo(char *chave, TAB *arv){
   printf("entrou pra alterar\n");
   Info *infos = BuscaInfos(chave, arv);
   if(!infos) return;
-  //printf("Valores originais: \n%d musicas\n%d minutos\nNome do album: %s",
-  //infos->nMusicas, infos->minutos, infos->nmAlbum);
+  int opcao;
+  printf("\nQual informacao voce quer editar?\n1- Nome do album\n2- Numero de musicas\n3- Duracao do album\n");
+  scanf("%d", &opcao);
 
-  printf("Digite os novos valores: \n");
-  printf("Musicas: ");
-  scanf("%d", &infos->nMusicas);
-  printf("Minutos: ");
-  scanf("%d", &infos->minutos);
-  printf("Nome do Album: ");
-  scanf("%s", infos->nmAlbum);
+  if(opcao == 1){
+    setbuf(stdin, NULL);
+    char nome[100];
+    printf("Digite o novo nome: ");
+    scanf("%[^\n]", nome);
+    strcpy(infos->nmAlbum, nome);
+  }
+  else if(opcao == 2){
+    printf("Digite o novo numero de musicas: ");
+    scanf("%d", &infos->nMusicas);
+  }
+  else if(opcao == 3){
+    printf("Digite o novo tempo de duracao: ");
+    scanf("%d", &infos->minutos);
+  }
+  
 }
-
 
 TAB *Inicializa(){
   return NULL;
@@ -152,7 +173,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar 
     strcpy(z->chave[j], y->chave[j+t]);
     //printf("===== ANO %d\n", z->adic[j]->ano );
 
-    z->adic[j] = y->adic[j+t];
+    //z->adic[j] = y->adic[j+t];
 
     //printf("===== ANO %d\n", z->adic[j]->ano );
 
@@ -168,7 +189,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar 
   x->filho[i] = z;
   for(j=x->nchaves; j>=i; j--){
     strcpy(x->chave[j], x->chave[j-1]);
-    x->adic[j] = x->adic[j-1];
+    //x->adic[j] = x->adic[j-1];
   }
   strcpy(x->chave[i-1], y->chave[t-1]);
   x->adic[i-1] = y->adic[t-1];
@@ -228,7 +249,6 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
     strcpy(T->adic[0]->cantor, adic->cantor);
     strcpy(T->adic[0]->nmAlbum,adic->nmAlbum);
 
-    //FALTA CANTOR E NM DO ALBUM
 
     T->nchaves=1;
     return T;
@@ -251,34 +271,55 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
 void BuscaObras(TAB* a, char *cantor, char *final){
   if(!a) return;
   if(a->folha){
-    printf("e folha");
+    //printf("%s\n", cantor);
     int i;
     char* chaveAtual = a->chave[0];
     while(strcmp(chaveAtual, final) != 0){
-      for(i=0; i<(a->nchaves); i++){
-        if(strcmp(a->adic[i]->cantor, cantor)==0){
+      for(i=0; i < (a->nchaves); i++){
+        if(strcmp(a->adic[i]->cantor, cantor) == 0){
           printf("%s\n", a->adic[i]->nmAlbum);
         }
         chaveAtual = a->chave[i];
       }
       a = a->prox;
     }
-
   }
   else{
-    printf("nao e folha\n");
+    //printf("nao e folha\n");
     BuscaObras(a->filho[0], cantor, final);
   }
 
 }
 
+TAB* RemoveObras(TAB* raiz, TAB* a, char *cantor, char *final){
+  if(!a) return a;
+  if(a->folha){ // se ja estiver num nó folha, começa a comparar os do lado, senao entra no else lá de baixo
+    int i;
+    char* chaveAtual = a->chave[0];
+    while(strcmp(chaveAtual, final) != 0){ //aqui ele checa se já ta no ultimo nó ou não, quando chegar no ultimo nó a chave atual vai ser igual a final e aí ele sai do while
+      for(i=0; i < (a->nchaves); i++){ //aqui percorre as chaves do nó
+        chaveAtual = a->chave[i];
+
+        if(strcmp(a->adic[i]->cantor, cantor) == 0){ //se o cantor do nó que vc ta for igual ao cantor que vc quer retirar ele chama a retira
+          retira(raiz, a->chave[i], 2);
+          i--;
+        }
+      }
+      a = a->prox; //e aqui passa pra o proximo no folha
+    }
+  }
+  else{ // se nao tiver chegado no nó folha aidna, chama a mesma funcao só que um "andar" abaixo, passando o filho mais da esquerda
+    RemoveObras(raiz, a->filho[0], cantor, final);
+  }
+  return a;
+}
+
 TAB* UltimoNo(TAB* a){
   if(!a) return a;
-  int max = a->nchaves;
   while(!a->folha){
+    int max = a->nchaves;
     a = a->filho[max]; //o ultimo filho da ultima chave do nó
   }
-  printf("%s", a->chave[a->nchaves-1]);
   return a;
 }
 
@@ -363,15 +404,16 @@ TAB* remover(TAB* arv, char *ch, int t){
       }
     }
 
-    if(!z){ //CASO 3B - QUEBRADO-TEM QUE CONSERTAR(Funcionando só para o caso i=0)
+    if(!z){ //CASO 3B - QUEBRADO-TEM QUE CONSERTAR
       if(i < arv->nchaves && arv->filho[i+1]->nchaves == t-1){
         printf("\nCASO 3B: i menor que nchaves\n");
-        z = arv->filho[i+1];
+        z = arv->filho[i+1]; //filho da direita
         int j;
-        if(!y->folha){
+
+        if(!y->folha){ //se nao for folha
           strcpy(y->chave[t-1], arv->chave[i]);     //pegar chave[i] e coloca ao final de filho[i]
           y->nchaves++;
-          for(j=0; j < t-1; j++){
+          for(j=0; j < t-1; j++) {
             strcpy(y->chave[t+j], z->chave[j]);     //passar filho[i+1] para filho[i]
             y->nchaves++;
           }
@@ -380,14 +422,15 @@ TAB* remover(TAB* arv, char *ch, int t){
             y->filho[t+j] = z->filho[j];
           }
 
-        }else{
+        }
+        else {
           for(j=0; j < t-1; j++){
             strcpy(y->chave[t-1+j], z->chave[j]);     //passar filho[i+1] para filho[i]
             y->nchaves++;
           }
           arv->filho[i+1] = y;
-
         }
+
         for(j=i; j < arv->nchaves-1; j++){ //limpar referências de i
           strcpy(arv->chave[j], arv->chave[j+1]);
           arv->filho[j+1] = arv->filho[j+2];
@@ -468,46 +511,66 @@ void menu(){
   printf("Por favor, digite o nome do arquivo: \n");
   scanf("%s", nmArq);
   arvore = leLinhas(arvore, nmArq);
+
+
+
+  Imprime(arvore,0);
+ 
   espera(1); //aguarda 2 segundos
   printf("\nCriando uma arvore B+...\n");
   espera(2); //aguarda 2 segundos
   printf("\nInserindo as informacoes do arquivo %s na nova arvore...\n", nmArq);
   espera(2);
+
+  //Imprime(arvore,0);
+	//retira(arvore, "Red Hot Chili Peppers2006", 2);
+ 
   while(operacao){
     printf("\nDigite um numero para escolher o que fazer agora:\n");
     espera(1);
-    printf("\n0- Sair\n1 - Ver a arvore\n2- Editar informacoes\n3- Remover informacao\n4- Buscar obras de um artista\n5- Liberar arvore\n");
+    printf("\n0- Sair\n1- Ver a arvore\n2- Editar informacoes\n3- Remover informacao\n4- Buscar obras de um artista\n5- Remover obras de um artista\n6- Liberar arvore\n7- Imprime Informacoes Secundarias\n");
     scanf("%d", &operacao);
+    setbuf(stdin, NULL);
     if(operacao == 1){
       Imprime(arvore,0);
     }  
     else if(operacao == 2){
-      char chave[200];
+      char chave[200] = "";
       printf("\nDigite o nome da chave que voce quer editar:\n");
       scanf("%[^\n]", chave);
       AlteraUmaInfo(chave, arvore);
     }
     else if(operacao == 3){
-      char chave[200];
+      char chave[200] = "";
       printf("\nDigite o nome da chave que voce quer remover:\n");
       scanf("%[^\n]", chave);
       remover(arvore, chave, 2);
     }
     else if(operacao == 4){
-      char chave[200];
+      char chave[200] = "";
       printf("\nDigite o nome do artista que voce quer buscar:\n");
       scanf("%[^\n]", chave);
-      BuscaObras(arvore, chave, UltimoNo(arvore)->chave[arvore->nchaves-1]);
+      TAB* ultimo = UltimoNo(arvore);
+      BuscaObras(arvore, chave, ultimo->chave[ultimo->nchaves-1]);
     }
     else if(operacao == 5){
+      char chave[200] = "";
+      printf("\nDigite o nome do artista que voce quer remover as obras:\n");
+      scanf("%[^\n]", chave);
+      TAB* ultimo = UltimoNo(arvore);
+      RemoveObras(arvore, arvore, chave, ultimo->chave[ultimo->nchaves-1]);
+    }
+    else if(operacao == 6){
       arvore = Libera(arvore);
+    }
+    else if(operacao == 7){
+      ImprimeInfos(arvore, 0);
+
     }
   }
   
 }
-
 void espera (unsigned int secs) {
     unsigned int retTime = time(0) + secs;  
     while (time(0) < retTime);              
 }
-
